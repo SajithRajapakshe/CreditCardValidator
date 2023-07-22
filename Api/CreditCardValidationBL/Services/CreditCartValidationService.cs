@@ -73,7 +73,7 @@ namespace CreditCardValidationBL.Services
             }
             return IsValidLength ?
                 new ValidationResult() { Type = ValidationResultType.VALID, ResultMessage = "" } :
-                new ValidationResult() { Type = ValidationResultType.INVALID, ResultMessage = "Invalid number size" };
+                new ValidationResult() { Type = ValidationResultType.INVALID, ResultMessage = "Invalid number length" };
         }
 
         /// <summary>
