@@ -25,21 +25,33 @@ const Home = () => {
     }
     const handleCardType = (e: any) => {
         setCardType(e.target.value);
+        setCardTypeMessage("");
     }
     const [apiResponsemessage, setApiResponsemessage] = useState("");
 
     const [cvvErrorMessage, setCvvMessage] = useState("");
+    const [cardTypeErrorMessage, setCardTypeMessage] = useState("");
     const [cardNumberErrorMessage, setCardNumberMessage] = useState("");
     const [expiryDateErrormessage, setExpiryDateErrorMessage] = useState("");
 
     const [cssClassMessage, setCssClassMessage] = useState("");
+
+    const validateCardType = (cardType: string) => {
+        if (cardType === "" || cardType === '0') {
+            setCardTypeMessage("Please select a valid card type");
+            setCssClassMessage('message alert alert-danger');
+            setApiResponsemessage("");
+            return false;
+        }
+    }
 
     const validateCVV = (cvv: string) => {
         const cvvRegex = /^[0-9\b]+$/;
         if (cvv === '' || cvv.length !== 3 || cvvRegex.test(cvv) === false) {
             setCvvMessage("Please enter valid CVV");
             setCssClassMessage('message alert alert-danger');
-            return;
+            setApiResponsemessage("");
+            return false;
         }
     }
 
@@ -47,7 +59,8 @@ const Home = () => {
         if (cardNumber === '') {
             setCardNumberMessage("Please enter valid card number");
             setCssClassMessage('message alert alert-danger');
-            return;
+            setApiResponsemessage("");
+            return false;
         }
     }
 
@@ -55,16 +68,16 @@ const Home = () => {
         if (expiryDate === '') {
             setExpiryDateErrorMessage("Please enter valid expiry date in format mm/yyyy");
             setCssClassMessage('message alert alert-danger');
-            return;
+            setApiResponsemessage("");
+            return false;
         }
     }
 
     let handleSubmit = async (e: any) => {
         e.preventDefault();
 
-        validateCVV(cvv);
-        validateEmptyCardNumber(cardNumber);
-        validateExpiryDate(expireDate);
+        if (validateCardType(cardType) === false || validateCVV(cvv) === false || validateEmptyCardNumber(cardNumber) === false || validateExpiryDate(expireDate) === false)
+            return;
 
         let formData = new FormData();
 
@@ -81,7 +94,10 @@ const Home = () => {
 
             let resJson = await res.json();
             setApiResponsemessage(resJson.resultMessage);
-            setCssClassMessage('message alert alert-success');
+            if (resJson.type === 1)
+                setCssClassMessage('message alert alert-success');
+            else
+                setCssClassMessage('message alert alert-danger');
         } catch (err) {
             console.log(err);
         }
@@ -96,12 +112,17 @@ const Home = () => {
                 <div className={'row'}>
                     <div className={'column'} style={{ marginRight: '100px', width: '400px' }} id={cardType} onChange={(e) => handleCardType(e)}>
                         <label>Card Type</label>
-                        <select className={'form-control'}>
+                        <select className={'form-control'} defaultValue={0}>
+                            <option value="0">Please select a card type</option>
                             <option value="1">Visa</option>
                             <option value="2">AMEX</option>
                             <option value="3">MasterCard</option>
                             <option value="4">Discover</option>
                         </select>
+                        {cardTypeErrorMessage ?
+
+                            <div className={cssClassMessage} style={{ width: '400px' }}><p>{cardTypeErrorMessage}</p></div> : null
+                        }
                     </div>
                     <div className={'column'} style={{ width: '400px' }}>
                         <label>Card Number</label>
