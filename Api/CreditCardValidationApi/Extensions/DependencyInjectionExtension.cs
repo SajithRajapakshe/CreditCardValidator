@@ -1,4 +1,5 @@
 ﻿using CreditCardValidationBL.Services;
+using CreditCardValidationBL.Services.Types;
 
 namespace CreditCardValidationApi.Extensions
 {
@@ -11,6 +12,10 @@ namespace CreditCardValidationApi.Extensions
         /// <returns></returns>
         public static IServiceCollection InjectDependencies(this IServiceCollection services)
         {
+            services.AddTransient<AmexCardValidationService>();
+            services.AddTransient<DiscoverCardValidationService>();
+            services.AddTransient<MasterCardValidationService>();
+            services.AddTransient<VisaCardValidationService>();
             services.AddTransient<ICreditCartValidationService, CreditCartValidationService>();
             return services;
         }

@@ -1,5 +1,6 @@
 ﻿using CreditCardValidationBL.Models;
 using CreditCardValidationBL.Services;
+using CreditCardValidationBL.Services.Types;
 using Microsoft.VisualBasic;
 using NUnit.Framework;
 
@@ -10,75 +11,77 @@ namespace CreditCardValidationTests
     /// </summary>
     public class CreditCardTests
     {
-        private CreditCartValidationService _service;
+        private AmexCardValidationService _amexService;
+        private DiscoverCardValidationService _discoverService;
+        private MasterCardValidationService _masterService;
+        private VisaCardValidationService _visaService;
+
         [SetUp]
         public void SetUp()
         {
-            _service = new CreditCartValidationService();
+            _amexService = new AmexCardValidationService();
+            _discoverService = new DiscoverCardValidationService();
+            _masterService = new MasterCardValidationService();
+            _visaService = new VisaCardValidationService();
         }
 
         [Test]
-        [TestCase("4111111111111111", 1)]
-        [TestCase("378282246310005", 2)]
-        [TestCase("5105105105105100", 3)]
-        [TestCase("6011111111111117", 4)]
-        public void IsValidCardNumberLength(string cardNumber, int cardType)
+        [TestCase("378282246310005")]
+        public void AmexCard_Valid(string cardNumber)
         {
-            Assert.That(_service.ValidateNumberLength(cardNumber, cardType).Type, Is.EqualTo(ValidationResultType.VALID));
+            Assert.That(_amexService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.VALID));
         }
 
         [Test]
-        [TestCase("411111111121111", 1)]
-        [TestCase("37828224110005", 2)]
-        [TestCase("51051051000", 3)]
-        [TestCase("601111111117", 4)]
-        public void IsInValidCardNumberLength(string cardNumber, int cardType)
+        [TestCase("3782822463100015")]
+        public void AmexCard_Invalid(string cardNumber)
         {
-            Assert.That(_service.ValidateNumberLength(cardNumber, cardType).Type, Is.EqualTo(ValidationResultType.INVALID));
+            Assert.That(_amexService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.INVALID));
+        }
+
+
+        [Test]
+        [TestCase("6011111111111117")]
+        public void DiscoverCard_Valid(string cardNumber)
+        {
+            Assert.That(_discoverService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.VALID));
         }
 
         [Test]
-        [TestCase("4012888888881881", 1)]
-        [TestCase("378282246310005", 2)]
-        [TestCase("5105105105105100", 3)]
-        [TestCase("6011111111111117", 4)]
-        public void IsValidCardNumberPrefix(string cardNumber, int cardType)
+        [TestCase("6011111111111118")]
+        public void DiscoverCard_Invalid(string cardNumber)
         {
-            Assert.That(_service.ValidateStartingPrefix(cardNumber, cardType).Type, Is.EqualTo(ValidationResultType.VALID));
+            Assert.That(_discoverService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.INVALID));
         }
 
         [Test]
-        [TestCase("5012888888881881", 1)]
-        [TestCase("678282246310005", 2)]
-        [TestCase("9105105105105100", 3)]
-        [TestCase("8011111111111117", 4)]
-        public void IsInValidCardNumberPrefix(string cardNumber, int cardType)
+        [TestCase("5105105105105100")]
+        public void MasterCard_Valid(string cardNumber)
         {
-            Assert.That(_service.ValidateStartingPrefix(cardNumber, cardType).Type, Is.EqualTo(ValidationResultType.INVALID));
+            Assert.That(_masterService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.VALID));
+        }
+
+        [Test]
+        [TestCase("5105105105105106")]
+        public void MasterCard_Invalid(string cardNumber)
+        {
+            Assert.That(_masterService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.INVALID));
         }
 
 
         [Test]
         [TestCase("4111111111111111")]
-        [TestCase("4012888888881881")]
-        [TestCase("378282246310005")]
-        [TestCase("6011111111111117")]
-        [TestCase("5105105105105100")]
-        public void Luhn_IsValidCardNumber(string cardNumber)
+        public void VisaCard_Valid(string cardNumber)
         {
-            Assert.That(_service.ValidateNumberSequence(cardNumber).Type, Is.EqualTo(ValidationResultType.VALID));
+            Assert.That(_visaService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.VALID));
         }
 
         [Test]
-        [TestCase("4111111111111")]
-        [TestCase("5105105105105106")]
-        [TestCase("9105105105105100")]
-        [TestCase("9111111111111111")]
-        public void Luhn_IsInValidCardNumber(string cardNumber)
+        [TestCase("4111111111111112")]
+        public void VisaCard_Invalid(string cardNumber)
         {
-            Assert.That(_service.ValidateNumberSequence(cardNumber).Type, Is.EqualTo(ValidationResultType.INVALID));
+            Assert.That(_visaService.ValidateCardNumber(cardNumber).Type, Is.EqualTo(ValidationResultType.INVALID));
         }
-
 
     }
 }
