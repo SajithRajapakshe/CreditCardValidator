@@ -19,3 +19,10 @@ correct Api URL.
 Ex : await fetch("http://localhost:5093/CreditCardValidator"
 
 12. I have added some screenshots of the running product. Please check.
+
+
+==================================================================================CHANGES AFTER FEEDBACKS=============================================================================
+
+1. Added an abstract class and 4 seprate inherited classes to perform tasks separately- OCP/Single responsibility principle
+2. Each card type has a class where performing separate functions - OCP/Single responsibility principle
+3. Changed the test cases 
