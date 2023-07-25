@@ -9,13 +9,8 @@ using System.Threading.Tasks;
 
 namespace CreditCardValidationBL.Services.Types
 {
-    public class MasterCardValidationService : CardType
+    public class MasterCardValidationService : CardType, ICreditCardValidationService
     {
-        public override ValidationResult ValidateNumberSequence(string cardNumber)
-        {
-            return base.ValidateNumberSequence(cardNumber);
-        }
-
         public override ValidationResult ValidateNumberLength(string cardNumber)
         {
             return cardNumber.Length == 16 ?
@@ -30,11 +25,5 @@ namespace CreditCardValidationBL.Services.Types
                 new ValidationResult() { Type = ValidationResultType.VALID, ResultMessage = "" } :
                 new ValidationResult() { Type = ValidationResultType.INVALID, ResultMessage = "invalid starting number" };
         }
-
-        public override ValidationResult ValidateCardNumber(string cardNumber)
-        {
-            return base.ValidateCardNumber(cardNumber);
-        }
-
     }
 }

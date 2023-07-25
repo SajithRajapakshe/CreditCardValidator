@@ -14,9 +14,6 @@ namespace CreditCardValidationBL.Models
     public class CreditCardDetailModel
     {
         [Required]
-        public int Type { get; set; }
-
-        [Required]
         public string? CardNumber { get; set; }
 
         [Required]

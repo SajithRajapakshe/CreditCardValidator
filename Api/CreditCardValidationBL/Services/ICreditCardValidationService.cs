@@ -10,8 +10,8 @@ namespace CreditCardValidationBL.Services
     /// <summary>
     /// Interface for card validation service
     /// </summary>
-    public interface ICreditCartValidationService
+    public interface ICreditCardValidationService
     {
-        Task<ValidationResult> ValidateCardNumber(CreditCardDetailModel details);
+        Task<ValidationResult> ValidateCardNumber(string cardNumber);
     }
 }

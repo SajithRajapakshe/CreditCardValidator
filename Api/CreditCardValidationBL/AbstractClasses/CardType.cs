@@ -39,7 +39,7 @@ namespace CreditCardValidationBL.AbstractClasses
         }
         public abstract ValidationResult ValidateNumberLength(string cardNumber);
         public abstract ValidationResult ValidateStartingPrefix(string cardNumber);
-        public virtual ValidationResult ValidateCardNumber(string cardNumber)
+        public virtual async Task<ValidationResult> ValidateCardNumber(string cardNumber)
         {
             ICollection<ValidationResult> validationResults = new List<ValidationResult>
             {

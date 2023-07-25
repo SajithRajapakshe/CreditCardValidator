@@ -12,11 +12,10 @@ namespace CreditCardValidationApi.Extensions
         /// <returns></returns>
         public static IServiceCollection InjectDependencies(this IServiceCollection services)
         {
-            services.AddTransient<AmexCardValidationService>();
-            services.AddTransient<DiscoverCardValidationService>();
-            services.AddTransient<MasterCardValidationService>();
-            services.AddTransient<VisaCardValidationService>();
-            services.AddTransient<ICreditCartValidationService, CreditCartValidationService>();
+            services.AddTransient<ICreditCardValidationService, AmexCardValidationService>();
+            services.AddTransient<ICreditCardValidationService, MasterCardValidationService>();
+            services.AddTransient<ICreditCardValidationService, DiscoverCardValidationService>();
+            services.AddTransient<ICreditCardValidationService, VisaCardValidationService>();
             return services;
         }
     }
